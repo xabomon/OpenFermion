@@ -10,22 +10,35 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 """
-Classes to store experimental data for postprocessing.
+Classes for data storage.
 """
+from collections import namedtuple
 
 
-class QPERoundData(object):
+QPERoundData_ = namedtuple(
+        typename='QPERoundData',
+        field_names=['num_rotations',
+                     'final_rotation',
+                     'measurement'])
+
+
+class QPERoundData(QPERoundData_):
     """ Results from a single round in a QPE experiment.
     Attributes:
         num_rotations (int): the number of rotations performed in this round
         final_rotation (float): the final rotation performed on the ancilla qubit
             in this round.
         measurement (bool): the measurement observed in this round
-        true_measurement (bool): if the ancilla is not reset between rounds, the
-            'true' measurement (in this case msmt is calculated as the
-            difference between the tmsmt of different rounds).
+        true_measurement (bool, optional): the 'true measurement' in each round:
+            In some physical setups where ancilla reset is costly, one can perform
+            QPE without resetting the ancilla qubit between rounds. In this case,
+            if a string of measurements t_r is obtained for round r=1,2,... the
+            'measurement' required by QPE for round r is m_r=t_r-t_{r-1}
+            (with m_0=0). In the absence of errors the actual value of the t_r
+            strings is not of interest, but T1 noise on the ancilla qubit affects
+            the t_r values instead of the m_r values. This can be corrected for
+            in some QPE estimators, which in turn require the value of t_r.
     """
-
     def __init__(self,
                  num_rotations,
                  final_rotation,
@@ -47,13 +60,18 @@ class QPERoundData(object):
                 the t_r values instead of the m_r values. This can be corrected for
                 in some QPE estimators, which in turn require the value of t_r.
         """
-        self.num_rotations = num_rotations
-        self.final_rotation = final_rotation
-        self.measurement = measurement
-        self.true_measurement = true_measurement
+        if true_measurement is None:
+            true_measurement = measurement
+        super(QPERoundData_, self).__init__(
+            num_rotations, final_rotation, measurement, true_measurement)
 
 
-class QPEExperimentData(object):
+QPEExperimentData_ = namedtuple(
+    typename='QPEExperimentData',
+    field_names=['rounds'])
+
+
+class QPEExperimentData(QPEExperimentData_):
     """ Results from a single QPE experiment. A QPE experiment consists of
     multiple rounds, each round involving k controlled-U rotations on the
     system register, a final rotation by an angle beta on the ancilla qubit,
@@ -64,11 +82,9 @@ class QPEExperimentData(object):
     """
     def __init__(self, rounds=None):
         """
-        Args (accepted in order):
-            rounds: list of RoundData objects.
+        Args:
+            rounds (list): list of QPERoundData objects.
         """
-
-        if rounds:
-            self.rounds = rounds
-        else:  # Empty experiment
-            self.rounds = []
+        if rounds is None:
+            rounds = []
+        super(QPEExperimentData_, self).__init__(rounds)

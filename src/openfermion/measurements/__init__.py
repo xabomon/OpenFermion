@@ -18,10 +18,5 @@ from ._equality_constraint_projection import (apply_constraints,
 from ._rdm_equality_constraints import (one_body_fermion_constraints,
                                         two_body_fermion_constraints)
 
-from ._bayesian_estimators import (BayesDepolarizingEstimator,
-                                   BayesEstimator)
-
-from ._probability_distributions import (FourierProbabilityDist)
-
 from ._data_containers import (QPEExperimentData,
                                QPERoundData)

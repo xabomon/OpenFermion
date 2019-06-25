@@ -9,14 +9,13 @@
 #   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
+"""Tests for _data_containers.py"""
 
-from ._equality_constraint_projection import (apply_constraints,
-                                              constraint_matrix,
-                                              linearize_term,
-                                              unlinearize_term)
+import unittest
+from ._data_containers import(
+    ShotData)
 
-from ._rdm_equality_constraints import (one_body_fermion_constraints,
-                                        two_body_fermion_constraints)
+class ShotDataTest(unittest.TestCase):
 
-from ._data_containers import (QPEExperimentData,
-                               QPERoundData)
+    def test_init(self):
+        sd = ShotData(qubits=('q1', 'q2'))

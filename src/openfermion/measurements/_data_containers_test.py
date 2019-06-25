@@ -13,34 +13,9 @@
 
 import unittest
 from ._data_containers import(
-    QPERoundData,
-    QPEExperimentData)
+    ShotData)
 
-class QPERoundDataTest(unittest.TestCase):
+class ShotDataTest(unittest.TestCase):
 
     def test_init(self):
-        rd = QPERoundData(
-            num_rotations=1,
-            final_rotation=0,
-            measurement=0)
-        self.assertEqual(rd.num_rotations, 1)
-        self.assertEqual(rd.final_rotation, 0)
-        self.assertEqual(rd.measurement, 0)
-        self.assertEqual(rd.true_measurement, None)
-
-class QPEExperimentDataTest(unittest.TestCase):
-
-    def test_blank_init(self):
-        ed = QPEExperimentData()
-        self.assertEqual(len(ed.rounds), 0)
-
-    def test_init_rounddata(self):
-        rd = QPERoundData(
-            num_rotations=1,
-            final_rotation=0,
-            measurement=0)
-        ed = QPEExperimentData(rounds=[rd])
-        self.assertEqual(len(ed.rounds), 1)
-        self.assertEqual(ed.rounds[0].num_rotations, 1)
-        self.assertEqual(ed.rounds[0].final_rotation, 0)
-        self.assertEqual(ed.rounds[0].measurement, 0)
+        sd = ShotData(qubits=('q1', 'q2'))

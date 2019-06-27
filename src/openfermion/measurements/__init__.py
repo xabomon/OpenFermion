@@ -10,6 +10,8 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+from ._compatibility_operators import construct_adjacency_matrix
+
 from ._equality_constraint_projection import (apply_constraints,
                                               constraint_matrix,
                                               linearize_term,
